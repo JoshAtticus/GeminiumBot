@@ -63,43 +63,23 @@ async def ask(ctx: Context, *question: str):
 		await ctx.send_msg(response.text)
 	else:
 		await ctx.send_msg("Error: Failed to get a response from the API.")
-
-
-# noinspection PyIncorrectDocstring
-@bot.command(name="logs")
-async def get_logs(ctx: Context, *args):
-	"""
-	Arguments:
-		start: Optional[int]
-		end: Optional[int]
-
-	Formated like this:
-		start=...
-
-	@prefix get_logs start=-200 end=-1
-	"""
-	# start=...
-	# end=...
-	start = -10
-	end = -1
-	arg: str
-	for arg in args:
-		if arg.startswith("start"):
-			start = int(arg.split("=")[1])
-		elif arg.startswith("end"):
-			end = int(arg.split("=")[1])
-
-	with open("debug.log") as logfile:
-		logs = logfile.readlines()
-
-	message = await ctx.send_msg("".join(logs[start: end]))
-	if not message:
-		await ctx.reply("Error: Logs to big for current env")
-
-
-@bot.command(name="bots")
-async def get_bots(ctx: Context):
-	await ctx.reply(f"\n {' '.join(list(bot.cache.bots.keys()))}")
+		
+@bot.command(name="theme")
+async def theme(ctx: Context, *question: str):
+	question = " ".join(question)
+	
+	await ctx.send_msg("Creating theme...")
+	
+	payload = {
+		"style": question
+	}
+	
+	response = requests.post("https://geminium.joshatticus.online/api/themium/generate", json=payload)
+	
+	if response.status_code == 200:
+		await ctx.send_msg("Here's your theme!\n\n" + response.text + "\n\n*P.S. want faster theme generation with instant previews? Try https://themium.joshatticus.online*")
+	else:
+		await ctx.send_msg("Error: Failed to get a response from the API.")
 
 
 class Ping(Cog):
@@ -114,10 +94,6 @@ class Ping(Cog):
 	@cog_ping.subcommand()
 	async def ping(self, ctx: Context):
 		await ctx.send_msg("Pong!\n My latency is: " + str(self.bot.latency))
-
-
-
-
 
 bot.register_cog(Ping(bot))
 bot.register_cog(HelpExt(bot, disable_command_newlines=True))
