@@ -1,0 +1,22 @@
+{
+  "name": "geminiumbot",
+  "version": "1.0.0",
+  "description": "Meower bot for Geminium; an AtticusAI Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo Hello World"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoshAtticus/GeminiumBot.git"
+  },
+  "author": "JoshAtticus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JoshAtticus/GeminiumBot/issues"
+  },
+  "homepage": "https://github.com/JoshAtticus/GeminiumBot#readme",
+  "dependencies": {
+    "meowerbot": "^2023.5.22"
+  }
+}
