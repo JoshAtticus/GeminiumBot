@@ -77,7 +77,7 @@ async def theme(ctx: Context, *question: str):
 	response = requests.post("https://geminium.joshatticus.online/api/themium/generate", json=payload)
 	
 	if response.status_code == 200:
-		await ctx.send_msg("Here's your theme!\n\n" + response.text + "\n\n*P.S. want faster theme generation with instant previews? Try https://themium.joshatticus.online*")
+		await ctx.send_msg("Here's your theme!\n\n`" + response.text + "`\n\n*P.S. want faster theme generation with instant previews? Try https://themium.joshatticus.online*")
 	else:
 		await ctx.send_msg("Error: Failed to get a response from the API.")
 
