@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/JoshAtticus/GeminiumBot#readme",
   "dependencies": {
+    "axios": "^1.6.7",
+    "dotenv": "^16.4.1",
     "meowerbot": "^2023.5.22"
   }
 }
