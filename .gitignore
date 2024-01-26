@@ -8,5 +8,5 @@ package-lock.json
 # macOS
 .DS_Store
 
-# MeowerBot
+# MeowerBot.py
 debug.log
