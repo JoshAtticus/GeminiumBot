@@ -5,6 +5,10 @@ from MeowerBot import Bot, CallBackIds
 from MeowerBot.context import Context, Post
 from MeowerBot.cog import Cog
 from MeowerBot.command import command
+import platform
+import psutil
+import sys
+import subprocess
 
 import logging
 
@@ -98,8 +102,44 @@ Geminium Commands
 
 Themium Commands
 - @Geminium theme (style) | Create a Meower theme with Themium
+
+Bot Commands
+- @Geminium sysinfo | Check system info
 """
 	await ctx.reply(help_message)
+        
+@bot.command(name="sysinfo")
+async def sysinfo_command(ctx):
+    # System info
+    system_info = f"-- System --\n"
+    system_info += f"Running on: {platform.system()} {platform.release()}\n"
+    system_info += f"Free Memory: {psutil.virtual_memory().available / 1024 / 1024:.2f} MB\n"
+    system_info += f"Used Memory: {psutil.virtual_memory().used / 1024 / 1024:.2f} MB\n"
+    system_info += f"Python version: {sys.version}\n"
+
+    # Bot info
+    bot_info = f"-- Bot --\n"
+    build_type = ""
+    update_status = ""
+
+    if subprocess.call("ls /etc/systemd/system/geminiumbot.service", shell=True) == 0:
+        build_type = "Stable (Deployed)"
+    elif subprocess.call("ls .dev", shell=True) == 0:
+        build_type = "Development"
+    else:
+        build_type = "Stable (Undeployed)"
+
+    if subprocess.call("git pull --dry-run | grep -q -v 'Already up-to-date.' && changed=1", shell=True) == 0:
+        update_status = "**Update Available**"
+    else:
+        update_status = "Up to date"
+
+    bot_info += f"Build type: {build_type}\n"
+    bot_info += f"Update Status: {update_status}\n"
+
+    # Send the message
+    message = f"Geminium for Meower\n\n{system_info}\n{bot_info}"
+    await ctx.reply(message)
 
 
 class Ping(Cog):
