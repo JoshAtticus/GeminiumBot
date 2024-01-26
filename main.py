@@ -34,7 +34,7 @@ async def login(_token):
 async def ask(ctx: Context, *question: str):
     question = " ".join(question)
 
-    await ctx.send_msg("Asking Geminium...")
+    await ctx.reply("Asking Geminium...")
 
     payload = {
         "question": question
@@ -44,16 +44,16 @@ async def ask(ctx: Context, *question: str):
         "https://geminium.joshatticus.online/api/geminium/ask", json=payload)
 
     if response.status_code == 200:
-        await ctx.send_msg(response.text)
+        await ctx.reply("\n\n" + response.text)
     else:
-        await ctx.send_msg("Error: Failed to get a response from the API.")
+        await ctx.reply("\nError: Failed to get a response from the API.")
 
 
 @bot.command(name="math")
 async def ask(ctx: Context, *question: str):
     question = " ".join(question)
 
-    await ctx.send_msg("Asking Geminium Math...")
+    await ctx.reply("Asking Geminium Math...")
 
     payload = {
         "question": question
@@ -63,16 +63,16 @@ async def ask(ctx: Context, *question: str):
         "https://geminium.joshatticus.online/api/geminium/math", json=payload)
 
     if response.status_code == 200:
-        await ctx.send_msg(response.text)
+        await ctx.reply("\n\n" + response.text)
     else:
-        await ctx.send_msg("Error: Failed to get a response from the API.")
+        await ctx.reply("\nError: Failed to get a response from the API.")
 
 
 @bot.command(name="theme")
 async def theme(ctx: Context, *question: str):
     question = " ".join(question)
 
-    await ctx.send_msg("Creating theme...")
+    await ctx.reply("Creating theme...")
 
     payload = {
         "style": question
@@ -82,9 +82,9 @@ async def theme(ctx: Context, *question: str):
         "https://geminium.joshatticus.online/api/themium/generate", json=payload)
 
     if response.status_code == 200:
-        await ctx.send_msg("Here's your theme!\n\n`" + response.text + "`\n\n*P.S. want faster theme generation with instant previews? Try https://themium.joshatticus.online*")
+        await ctx.reply("Here's your theme!\n\n`" + response.text + "`\n\n*P.S. want faster theme generation with instant previews? Try https://themium.joshatticus.online*")
     else:
-        await ctx.send_msg("Error: Failed to get a response from the API.")
+        await ctx.reply("Error: Failed to get a response from the API.")
 
 
 @bot.command(name="help")
@@ -99,7 +99,7 @@ Geminium Commands
 Themium Commands
 - @Geminium theme (style) | Create a Meower theme with Themium
 """
-	await ctx.send_msg(help_message)
+	await ctx.reply(help_message)
 
 
 class Ping(Cog):
