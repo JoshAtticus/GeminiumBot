@@ -71,6 +71,24 @@ async def ask(ctx: Context, *question: str):
     else:
         await ctx.reply("\nError: Failed to get a response from the API.")
 
+@bot.command(name="teachme")
+async def ask(ctx: Context, *question: str):
+    question = " ".join(question)
+
+    await ctx.reply("Asking Geminium Teachme...")
+
+    payload = {
+        "question": question
+    }
+
+    response = requests.post(
+        "https://geminium.joshatticus.online/api/geminium/teachme", json=payload)
+
+    if response.status_code == 200:
+        await ctx.reply("\n\n" + response.text)
+    else:
+        await ctx.reply("\nError: Failed to get a response from the API.")
+
 
 @bot.command(name="theme")
 async def theme(ctx: Context, *question: str):
@@ -99,6 +117,7 @@ Geminium | Created & Maintained by JoshAtticus | An Atticus AI Project
 Geminium Commands
 - @Geminium ask (question) | Ask Geminium AI a question
 - @Geminium math (question) | Ask Geminium Math a question
+- @Geminium teachme (question) | Ask Geminium Teachme a question
 
 Themium Commands
 - @Geminium theme (style) | Create a Meower theme with Themium
