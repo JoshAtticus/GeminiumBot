@@ -16,7 +16,7 @@ async function startBot() {
     });
 
     bot.onCommand("ask", (ctx) => {
-        const question = ctx.args.join(" ")
+        const question = ctx.args.slice(1).join(" "); // remove the command itself
     
         var options = {
             method: 'POST',
@@ -30,8 +30,7 @@ async function startBot() {
         }).catch(function (error) {
             console.error(error);
         });
-    });
-    
+    });    
 
     bot.onCommand((command, ctx) => {
         ctx.reply(`That command doesn't exist! Send @Geminium help for a list of commands`);
