@@ -155,7 +155,7 @@ async def glass(ctx: Context, image_url: str):
             image = image.convert("RGB")
 
             # Blur the image
-            blur_radius = 10  # Increase this value for stronger blur
+            blur_radius = 30  # Increase this value for stronger blur
             blurred_image = image.filter(ImageFilter.GaussianBlur(radius=blur_radius))
 
             # Reduce brightness by 50%
