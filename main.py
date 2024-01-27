@@ -9,6 +9,7 @@ import platform
 import psutil
 import sys
 import subprocess
+import shlex
 
 import logging
 
@@ -34,9 +35,13 @@ async def login(_token):
     print("Logged in!")
 
 
+import shlex
+import requests
+
 @bot.command(name="ask")
 async def ask(ctx: Context, *question: str):
     question = " ".join(question)
+    question = shlex.quote(question)
 
     await ctx.reply("Asking Geminium...")
 
@@ -53,9 +58,11 @@ async def ask(ctx: Context, *question: str):
         await ctx.reply("\nError: Failed to get a response from the API.")
 
 
+
 @bot.command(name="math")
 async def ask(ctx: Context, *question: str):
     question = " ".join(question)
+    question = shlex.quote(question)
 
     await ctx.reply("Asking Geminium Math...")
 
@@ -74,6 +81,7 @@ async def ask(ctx: Context, *question: str):
 @bot.command(name="teachme")
 async def ask(ctx: Context, *question: str):
     question = " ".join(question)
+    question = shlex.quote(question)
 
     await ctx.reply("Asking Geminium Teachme...")
 
@@ -93,6 +101,7 @@ async def ask(ctx: Context, *question: str):
 @bot.command(name="theme")
 async def theme(ctx: Context, *question: str):
     question = " ".join(question)
+    question = shlex.quote(question)
 
     await ctx.reply("Creating theme...")
 
