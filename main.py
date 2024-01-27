@@ -1,3 +1,4 @@
+from io import BytesIO
 from MeowerBot.ext.help import Help as HelpExt
 from os import environ as env
 import requests
@@ -10,7 +11,9 @@ import psutil
 import sys
 import subprocess
 import shlex
-
+import base64
+import os
+from PIL import Image, ImageFilter, ImageEnhance
 import logging
 
 from dotenv import load_dotenv  # type: ignore
@@ -29,14 +32,32 @@ logging.basicConfig(
 logging.getLogger("websockets.client").setLevel(logging.INFO)
 bot = Bot()
 
+trusted_domains = [
+    "https://meower.org/",
+    "https://http.meower.org/",
+    "https://assets.meower.org/",
+    "https://forums.meower.org/",
+    "https://hedgedoc.meower.org/",
+    "https://docs.meower.org/",
+    "https://uploads.meower.org/",
+    "https://u.cubeupload.com/",
+    "https://cubeupload.com/",
+    "https://i.ibb.co/",
+    "https://media.tenor.com/",
+    "https://tenor.com/",
+    "https://c.tenor.com/",
+    "https://assets.scratch.mit.edu/",
+    "https://cdn2.scratch.mit.edu/",
+    "https://cdn.scratch.mit.edu/",
+    "https://uploads.scratch.mit.edu/",
+    "https://cdn.discordapp.com/",
+    "https://media.discordapp.net/"
+]
+
 
 @bot.event
 async def login(_token):
     print("Logged in!")
-
-
-import shlex
-import requests
 
 @bot.command(name="ask")
 async def ask(ctx: Context, *question: str):
@@ -117,6 +138,55 @@ async def theme(ctx: Context, *question: str):
     else:
         await ctx.reply("Error: Failed to get a response from the API.")
 
+@bot.command(name="glass")
+async def glass(ctx: Context, image_url: str):
+    await ctx.reply("Checking image source...")
+
+    if any(domain in image_url for domain in trusted_domains):
+        await ctx.reply("Downloading and processing the image...")
+
+        # Download the image
+        response = requests.get(image_url)
+        if response.status_code == 200:
+            # Process the image (blur and reduce brightness)
+            image = Image.open(BytesIO(response.content))
+
+            # Convert image to RGB mode
+            image = image.convert("RGB")
+
+            # Blur the image
+            blurred_image = image.filter(ImageFilter.BLUR)
+
+            # Reduce brightness by 50%
+            enhancer = ImageEnhance.Brightness(blurred_image)
+            darkened_image = enhancer.enhance(0.5)
+
+            # Save the processed image
+            processed_image_path = "processed_image.jpg"
+            darkened_image.save(processed_image_path)
+
+            # Upload the processed image to ImgBB API
+            with open(processed_image_path, "rb") as file:
+                encoded_image = base64.b64encode(file.read()).decode("utf-8")
+
+            imgbb_api_key = os.getenv("IMGBB_KEY")  # Replace with your ImgBB API key
+            upload_url = f"https://api.imgbb.com/1/upload?key={imgbb_api_key}"
+            response = requests.post(upload_url, data={"image": encoded_image})
+
+            if response.status_code == 200:
+                image_link = response.json()["data"]["image"]["url"]
+                await ctx.reply(f"Here's your glass image!\n\n[Glass Image: {image_link}]")
+            else:
+                await ctx.reply("Error: Failed to upload the processed image.")
+                
+            # Clean up the processed image file
+            os.remove(processed_image_path)
+        else:
+            await ctx.reply("Error: Failed to download the image.")
+    else:
+        await ctx.reply("Sorry, that image is not from a trusted domain.")
+
+
 
 @bot.command(name="help")
 async def help_command(ctx: Context):
@@ -133,6 +203,9 @@ Themium Commands
 
 Bot Commands
 - @Geminium sysinfo | Check system info
+
+Image Commands
+- @Geminium glass (image url) | Gives image glass effect
 """
 	await ctx.reply(help_message)
         
