@@ -163,7 +163,7 @@ async def glass(ctx: Context, image_url: str):
             darkened_image = enhancer.enhance(0.5)
 
             # Save the processed image
-            processed_image_path = "processed_image.jpg"
+            processed_image_path = "processed_image.png"
             darkened_image.save(processed_image_path)
 
             # Upload the processed image to ImgBB API
