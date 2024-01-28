@@ -187,7 +187,8 @@ async def glass(ctx: Context, image_url: str):
             await ctx.reply("Error: Failed to download the image.")
     else:
         await ctx.reply("Sorry, that image is not from a trusted domain.")
-    
+
+
 @bot.command(name="atticus")
 async def atticus(ctx: Context, image_number: int = None):
     await ctx.reply("Checking image source...")
