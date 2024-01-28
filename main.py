@@ -195,7 +195,7 @@ async def atticus(ctx: Context, argument: str = None):
 
     if argument == "list":
         image_files = [f for f in os.listdir(image_directory) if f.endswith('.png')]
-        await ctx.reply(f"There are **{len(image_files)}** Atticus pictures.\n\nRun @Geminium atticus (number) to see a specific Atticus picture.")
+        await ctx.reply(f"I have 49 **{len(image_files)}** Atticus pictures available.\n\nRun @Geminium atticus (number) to see a specific Atticus picture.")
     else:
         image_number = int(argument) if argument else None
 
