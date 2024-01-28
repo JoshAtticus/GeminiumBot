@@ -190,35 +190,42 @@ async def glass(ctx: Context, image_url: str):
 
 
 @bot.command(name="atticus")
-async def atticus(ctx: Context, image_number: int = None):
-
+async def atticus(ctx: Context, argument: str = None):
     image_directory = "atticuspics"
-    if image_number is None:
+
+    if argument == "list":
         image_files = [f for f in os.listdir(image_directory) if f.endswith('.png')]
-        image_file = random.choice(image_files)
-        image_path = os.path.join(image_directory, image_file)
-        image_number = image_file.split('.')[0]  # Get the number from the filename
+        await ctx.reply(f"There are **{len(image_files)}** Atticus pictures.\n\nRun @Geminium atticus (number) to see a specific Atticus picture.")
     else:
-        image_path = os.path.join(image_directory, f"{image_number}.png")
+        image_number = int(argument) if argument else None
+        await ctx.reply("Checking image source...")
 
-    if os.path.isfile(image_path):
-        await ctx.reply("Uploading Atticus image...")
-        
-        # Open the image
-        with open(image_path, "rb") as file:
-            encoded_image = base64.b64encode(file.read()).decode("utf-8")
-
-        imgbb_api_key = os.getenv("IMGBB_KEY")  # Replace with your ImgBB API key
-        upload_url = f"https://api.imgbb.com/1/upload?key={imgbb_api_key}"
-        response = requests.post(upload_url, data={"image": encoded_image})
-
-        if response.status_code == 200:
-            image_link = response.json()["data"]["image"]["url"]
-            await ctx.reply(f"Atticus Pic #{image_number}\n\n[Image: {image_link}]")
+        if image_number is None:
+            image_files = [f for f in os.listdir(image_directory) if f.endswith('.png')]
+            image_file = random.choice(image_files)
+            image_path = os.path.join(image_directory, image_file)
+            image_number = image_file.split('.')[0]  # Get the number from the filename
         else:
-            await ctx.reply("Error: Failed to upload the image.")
-    else:
-        await ctx.reply("Sorry, that image was not found.")
+            image_path = os.path.join(image_directory, f"{image_number}.png")
+
+        if os.path.isfile(image_path):
+            await ctx.reply("Uploading the image...")
+            
+            # Open the image
+            with open(image_path, "rb") as file:
+                encoded_image = base64.b64encode(file.read()).decode("utf-8")
+
+            imgbb_api_key = os.getenv("IMGBB_KEY")  # Replace with your ImgBB API key
+            upload_url = f"https://api.imgbb.com/1/upload?key={imgbb_api_key}"
+            response = requests.post(upload_url, data={"image": encoded_image})
+
+            if response.status_code == 200:
+                image_link = response.json()["data"]["image"]["url"]
+                await ctx.reply(f"Atticus Pic #{image_number}\n\n[Image: {image_link}]")
+            else:
+                await ctx.reply("Error: Failed to upload the image.")
+        else:
+            await ctx.reply("Sorry, that image was not found.")
 
 
 
