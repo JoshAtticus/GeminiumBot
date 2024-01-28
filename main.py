@@ -197,11 +197,12 @@ async def atticus(ctx: Context, image_number: int = None):
         image_files = [f for f in os.listdir(image_directory) if f.endswith('.png')]
         image_file = random.choice(image_files)
         image_path = os.path.join(image_directory, image_file)
+        image_number = image_file.split('.')[0]  # Get the number from the filename
     else:
         image_path = os.path.join(image_directory, f"{image_number}.png")
 
     if os.path.isfile(image_path):
-        await ctx.reply("Uploading the image...")
+        await ctx.reply("Uploading Atticus image...")
         
         # Open the image
         with open(image_path, "rb") as file:
@@ -213,7 +214,7 @@ async def atticus(ctx: Context, image_number: int = None):
 
         if response.status_code == 200:
             image_link = response.json()["data"]["image"]["url"]
-            await ctx.reply(f"Here's your image!\n\n[Image: {image_link}]")
+            await ctx.reply(f"Atticus Pic #{image_number}\n\n[Image: {image_link}]")
         else:
             await ctx.reply("Error: Failed to upload the image.")
     else:
