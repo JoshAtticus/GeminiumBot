@@ -191,7 +191,6 @@ async def glass(ctx: Context, image_url: str):
 
 @bot.command(name="atticus")
 async def atticus(ctx: Context, image_number: int = None):
-    await ctx.reply("Checking image source...")
 
     image_directory = "atticuspics"
     if image_number is None:
