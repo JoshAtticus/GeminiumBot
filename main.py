@@ -198,7 +198,6 @@ async def atticus(ctx: Context, argument: str = None):
         await ctx.reply(f"There are **{len(image_files)}** Atticus pictures.\n\nRun @Geminium atticus (number) to see a specific Atticus picture.")
     else:
         image_number = int(argument) if argument else None
-        await ctx.reply("Checking image source...")
 
         if image_number is None:
             image_files = [f for f in os.listdir(image_directory) if f.endswith('.png')]
