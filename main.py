@@ -63,6 +63,20 @@ async def login(_token):
 @bot.command(name="ask")
 async def ask(ctx: Context, *question: str):
     question = " ".join(question)
+
+    # Make a GET request to the integrity validation endpoint
+    integrity_response = requests.get("https://geminium.joshatticus.online/integrity/validate")
+
+    if integrity_response.status_code == 200:
+        integrity_result = integrity_response.json().get("result", False)
+        if integrity_result:
+            question += "\n\n{\"integrity\": \"true\"}"
+        else:
+            question += "\n\n{\"integrity\": \"false\"}"
+    else:
+        await ctx.reply("\nError: Failed to get a response from the Geminium App integrity validation API.")
+        return
+
     question = shlex.quote(question)
 
     await ctx.reply("Asking Geminium...")
