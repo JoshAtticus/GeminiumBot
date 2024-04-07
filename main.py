@@ -65,7 +65,7 @@ async def ask(ctx: Context, *question: str):
     question = " ".join(question)
 
     # Make a GET request to the integrity validation endpoint
-    integrity_response = requests.get("https://geminium.joshatticus.online/integrity/validate")
+    integrity_response = requests.get("https://geminium.joshatticus.online/api/integrity/validate")
 
     if integrity_response.status_code == 200:
         integrity_result = integrity_response.json().get("result", False)
