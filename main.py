@@ -63,6 +63,8 @@ async def login(_token):
 @bot.command(name="ask")
 async def ask(ctx: Context, *question: str):
     question = " ".join(question)
+    
+    await ctx.reply("Asking Geminium...")
 
     # Make a GET request to the integrity validation endpoint
     integrity_response = requests.get("https://geminium.joshatticus.online/api/integrity/validate")
@@ -78,8 +80,6 @@ async def ask(ctx: Context, *question: str):
         return
 
     question = shlex.quote(question)
-
-    await ctx.reply("Asking Geminium...")
 
     payload = {
         "question": question
