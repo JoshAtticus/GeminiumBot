@@ -63,7 +63,8 @@ async def login(_token):
 @bot.command(name="ask")
 async def ask(ctx: Context, *question: str):
     question = " ".join(question)
-    
+    question = question.replace("'", "\\'")  # Escape single quotes
+
     await ctx.reply("Asking Geminium...")
 
     # Make a GET request to the integrity validation endpoint
