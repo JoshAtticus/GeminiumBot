@@ -2,7 +2,7 @@ from io import BytesIO
 from MeowerBot.ext.help import Help as HelpExt
 from os import environ as env
 import requests
-from MeowerBot import bot, CallBackIds
+from MeowerBot import Bot, CallBackIds
 from MeowerBot.context import Context, Post
 from MeowerBot.cog import Cog
 from MeowerBot.command import command
